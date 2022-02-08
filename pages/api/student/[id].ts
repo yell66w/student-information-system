@@ -19,10 +19,14 @@ export default async function handle(
   }
 
   async function handleGET(studentId: string | string[], res: NextApiResponse) {
-    const post = await prisma.student.findUnique({
-      where: { id: Number(studentId) },
-    });
-    res.json(post);
+    try {
+      const post = await prisma.student.findUnique({
+        where: { id: Number(studentId) },
+      });
+      return res.json(post);
+    } catch (error: any) {
+      return res.status(400).send(error.message);
+    }
   }
 
   // DELETE /api/post/:id
@@ -30,9 +34,13 @@ export default async function handle(
     studentId: string | string[],
     res: NextApiResponse
   ) {
-    const post = await prisma.student.delete({
-      where: { id: Number(studentId) },
-    });
-    res.json(post);
+    try {
+      const post = await prisma.student.delete({
+        where: { id: Number(studentId) },
+      });
+      return res.json(post);
+    } catch (error: any) {
+      return res.status(400).send(error.message);
+    }
   }
 }

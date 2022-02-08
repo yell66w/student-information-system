@@ -8,25 +8,41 @@ export default async function handle(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { first_name, last_name } = req.body;
-    const student = await prisma.student.create({
-      data: {
-        first_name,
-        last_name,
-      },
-    });
-    //TEMPORARY
-    const student_no = (student.student_no += STUD_NO);
-    const result = await prisma.student.update({
-      data: {
-        student_no,
-      },
-      where: {
-        id: student.id,
-      },
-    });
-    res.json(result);
+    const { first_name, last_name, collegeId } = req.body;
+
+    if (!first_name || !last_name || !collegeId) {
+      return res.status(400).send("Missing fields.");
+    }
+    try {
+      const student = await prisma.student.create({
+        data: {
+          first_name,
+          last_name,
+          college: {
+            connect: {
+              id: Number(collegeId),
+            },
+          },
+        },
+      });
+      // TEMPORARY
+      const student_no = (student.student_no += STUD_NO);
+      const result = await prisma.student.update({
+        data: {
+          student_no,
+        },
+        where: {
+          id: student.id,
+        },
+        include: {
+          college: true,
+        },
+      });
+      return res.json(result);
+    } catch (error: any) {
+      return res.status(400).send(error.message);
+    }
   } else {
-    res.status(400).send("Bad Request");
+    return res.status(400).send("Bad Request");
   }
 }

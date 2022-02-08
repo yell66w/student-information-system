@@ -10,11 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Student {
   id      Int      @id @default(autoincrement())
   student_no   Int   @unique @default(autoincrement())
   first_name    String
   last_name   String
+  college College @relation(fields: [collegeId],references: [id])
+  collegeId Int
+  courses StudentsOnCourses[]
+}
+
+model College {
+  id      Int      @id @default(autoincrement())
+  name    String @unique 
+  acronym String @unique
+  students Student[]
+  programs Program[]
+}
+
+model Program {
+  id      Int      @id @default(autoincrement())
+  name    String @unique 
+  acronym String @unique
+  college College @relation(fields: [collegeId],references: [id])
+  collegeId Int
+  courses Course[]
+}
+
+model Course {
+  id      Int      @id @default(autoincrement())
+  name    String @unique 
+  code String @unique
+  program Program @relation(fields: [programId],references: [id])
+  programId Int
+  students StudentsOnCourses[]
+
+}
+
+model StudentsOnCourses{
+  course Course @relation(fields: [courseId],references: [id])
+  courseId Int
+  student Student @relation(fields: [studentId],references: [id])
+  studentId Int
+  dateEnrolled DateTime @default(now())
+  @@id([courseId, studentId])
 }
 
