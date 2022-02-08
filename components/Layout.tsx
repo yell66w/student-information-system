@@ -7,9 +7,11 @@ import Navbar from "./Navbar";
 const Layout: NextPage = ({ children }) => {
   return (
     <>
-      <Navbar />
-      <Flex direction="column" px={12}>
-        {children}
+      <Flex direction="column" letterSpacing="wide" gap={6}>
+        <Navbar />
+        <Flex direction="column" px={12}>
+          {children}
+        </Flex>
       </Flex>
     </>
   );

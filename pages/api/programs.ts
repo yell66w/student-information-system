@@ -6,13 +6,9 @@ export default async function handle(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const students = await prisma.student.findMany({
-      include: {
-        college: true,
-      },
-    });
-    res.json(students);
+    const programs = await prisma.program.findMany({});
+    res.json(programs);
   } else {
-    res.status(404).send("Cannot GET students");
+    res.status(404).send("Cannot GET programs");
   }
 }

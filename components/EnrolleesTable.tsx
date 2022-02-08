@@ -10,7 +10,7 @@ type Props = {
 
 const EnrolleesTable: NextPage<Props> = ({ enrollees }) => {
   return (
-    <Table variant="simple">
+    <Table variant="simple" fontSize="sm">
       <Thead>
         <Tr>
           <Th>ID</Th>
