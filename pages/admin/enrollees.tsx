@@ -1,14 +1,13 @@
-import { Flex } from "@chakra-ui/react";
 import type { GetServerSideProps, NextPage } from "next";
-import EnrolleesTable from "../components/EnrolleesTable";
-import API_URL from "../lib/API";
-import { Enrollees } from "../types/entities";
+import EnrolleesTable from "../../components/EnrolleesTable";
+import API_URL from "../../lib/API";
+import { Enrollees } from "../../types/entities";
 type Props = {
   enrollees: Enrollees[];
 };
 
-const Home: NextPage<Props> = ({ enrollees }) => {
-  return <div>Home</div>;
+const Enrollees: NextPage<Props> = ({ enrollees }) => {
+  return <EnrolleesTable enrollees={enrollees} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -19,4 +18,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default Home;
+export default Enrollees;
