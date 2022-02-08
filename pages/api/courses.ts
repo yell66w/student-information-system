@@ -6,7 +6,9 @@ export default async function handle(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const courses = await prisma.course.findMany({});
+    const courses = await prisma.course.findMany({
+      orderBy: [{ id: "asc" }],
+    });
     res.json(courses);
   } else {
     res.status(404).send("Cannot GET courses");

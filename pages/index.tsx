@@ -1,6 +1,4 @@
-import { Flex } from "@chakra-ui/react";
 import type { GetServerSideProps, NextPage } from "next";
-import EnrolleesTable from "../components/EnrolleesTable";
 import API_URL from "../lib/API";
 import { Enrollees } from "../types/entities";
 type Props = {

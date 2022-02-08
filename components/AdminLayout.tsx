@@ -9,7 +9,7 @@ const AdminLayout: NextPage = ({ children }) => {
     <>
       <Flex minH="100vh" direction="column" letterSpacing="wide" gap={6}>
         <Navbar />
-        <Flex direction="row" px={12} gap={6}>
+        <Flex direction="row" px={6} gap={6}>
           <Flex
             minH="100vh"
             borderRight="1px"
@@ -18,6 +18,7 @@ const AdminLayout: NextPage = ({ children }) => {
             direction="column"
             gap={6}
             py={6}
+            pl={6}
           >
             <Link href="/admin/colleges">Colleges</Link>
             <Link href="/admin/programs">Programs</Link>
@@ -25,7 +26,7 @@ const AdminLayout: NextPage = ({ children }) => {
             <Link href="/admin/students">Students</Link>
             <Link href="/admin/enrollees">Enrollees</Link>
           </Flex>
-          <Flex w="full" px={6} direction="column" py={6} h="full">
+          <Flex w="full" px={3} direction="column" pt={3} h="full">
             {children}
           </Flex>
         </Flex>

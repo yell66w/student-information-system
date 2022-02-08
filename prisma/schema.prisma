@@ -32,7 +32,7 @@ model Program {
   id      Int      @id @default(autoincrement())
   name    String @unique 
   acronym String @unique
-  college College @relation(fields: [collegeId],references: [id])
+  college College @relation(fields: [collegeId],references: [id],onDelete: Cascade)
   collegeId Int
   courses Course[]
 }
@@ -41,7 +41,7 @@ model Course {
   id      Int      @id @default(autoincrement())
   name    String @unique 
   code String @unique
-  program Program @relation(fields: [programId],references: [id])
+  program Program @relation(fields: [programId],references: [id],onDelete: Cascade)
   programId Int
   students StudentsOnCourses[]
 
@@ -49,9 +49,9 @@ model Course {
 
 model StudentsOnCourses{
   id      Int      @id @default(autoincrement())
-  course Course @relation(fields: [courseId],references: [id])
+  course Course @relation(fields: [courseId],references: [id],onDelete: Cascade)
   courseId Int
-  student Student @relation(fields: [studentId],references: [id])
+  student Student @relation(fields: [studentId],references: [id],onDelete: Cascade)
   studentId Int
   dateEnrolled DateTime @default(now())
 }

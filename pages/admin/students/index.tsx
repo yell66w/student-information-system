@@ -1,5 +1,18 @@
-import { Flex, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Flex,
+  HStack,
+  Link,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import type { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
+import AdminBodyHeader from "../../../components/AdminBodyHeader";
 import API_URL from "../../../lib/API";
 import { Student } from "../../../types/entities";
 type Props = {
@@ -7,13 +20,26 @@ type Props = {
 };
 
 const Students: NextPage<Props> = ({ students }) => {
+  const router = useRouter();
+  const onDelete = async (id: number) => {
+    try {
+      await fetch(`${API_URL}/student/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      await router.push("/admin/students");
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <>
-      <Flex mb={6} pb={3} borderBottom="1px" borderBottomColor="gray.300">
-        <Text fontSize="2xl" fontWeight="bold">
-          Students
-        </Text>
-      </Flex>
+      <AdminBodyHeader
+        title="Students"
+        showCreateButton
+        createTitle="Create a Student"
+        createHref="/students/create"
+      />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>
@@ -21,6 +47,7 @@ const Students: NextPage<Props> = ({ students }) => {
             <Th>Student #</Th>
             <Th>Name</Th>
             <Th>College</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -33,6 +60,28 @@ const Students: NextPage<Props> = ({ students }) => {
                     {student.first_name} {student.last_name}
                   </Td>
                   <Td>{student.college.name}</Td>
+                  <Td>
+                    <HStack>
+                      <Link
+                        color="messenger.500"
+                        href={`/admin/students/${student.id}/enroll`}
+                      >
+                        Enroll
+                      </Link>
+                      <Link
+                        color="orange.500"
+                        href={`/admin/students/${student.id}/edit`}
+                      >
+                        Edit
+                      </Link>
+                      <Link
+                        color="red.500"
+                        onClick={() => onDelete(student.id)}
+                      >
+                        Delete
+                      </Link>
+                    </HStack>
+                  </Td>
                 </Tr>
               ))
             : null}

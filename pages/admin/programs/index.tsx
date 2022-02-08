@@ -1,6 +1,7 @@
 import { Flex, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import { Program } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
+import AdminBodyHeader from "../../../components/AdminBodyHeader";
 import API_URL from "../../../lib/API";
 type Props = {
   programs: Program[];
@@ -9,11 +10,11 @@ type Props = {
 const Programs: NextPage<Props> = ({ programs }) => {
   return (
     <>
-      <Flex mb={6} pb={3} borderBottom="1px" borderBottomColor="gray.300">
-        <Text fontSize="2xl" fontWeight="bold">
-          Programs
-        </Text>
-      </Flex>
+      <AdminBodyHeader
+        title="Programs"
+        showCreateButton
+        createTitle="Create a Program"
+      />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>

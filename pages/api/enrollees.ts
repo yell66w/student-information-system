@@ -7,15 +7,17 @@ export default async function handle(
 ) {
   if (req.method === "GET") {
     const studentOnCourses = await prisma.studentsOnCourses.findMany({
+      orderBy: [{ id: "asc" }],
+
       include: {
-        student: {
-          include: {
-            college: true,
-          },
-        },
+        student: true,
         course: {
           include: {
-            program: true,
+            program: {
+              include: {
+                college: true,
+              },
+            },
           },
         },
       },
