@@ -137,12 +137,25 @@ const collegeData: Prisma.CollegeCreateInput[] = [
 
 async function main() {
   console.log(`Start seeding ...`);
+
   for (const c of collegeData) {
     const college = await prisma.college.create({
       data: c,
+      include: {
+        students: true,
+      },
     });
     console.log(`Created college with college id: ${college.id}`);
   }
+
+  await prisma.student.updateMany({
+    data: {
+      student_no: {
+        increment: STUD_NO,
+      },
+    },
+  });
+
   console.log(`Seeding finished.`);
 }
 
