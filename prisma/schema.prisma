@@ -23,6 +23,7 @@ model Student {
 model College {
   id      Int      @id @default(autoincrement())
   name    String @unique 
+  acronym String @unique
   students Student[]
   programs Program[]
 }
@@ -30,6 +31,7 @@ model College {
 model Program {
   id      Int      @id @default(autoincrement())
   name    String @unique 
+  acronym String @unique
   college College @relation(fields: [collegeId],references: [id])
   collegeId Int
   courses Course[]
