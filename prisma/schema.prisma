@@ -48,11 +48,11 @@ model Course {
 }
 
 model StudentsOnCourses{
+  id      Int      @id @default(autoincrement())
   course Course @relation(fields: [courseId],references: [id])
   courseId Int
   student Student @relation(fields: [studentId],references: [id])
   studentId Int
   dateEnrolled DateTime @default(now())
-  @@id([courseId, studentId])
 }
 
