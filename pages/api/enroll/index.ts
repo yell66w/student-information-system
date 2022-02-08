@@ -7,7 +7,21 @@ export default async function handle(
 ) {
   if (req.method === "POST") {
     const { courseId, studentId } = req.body;
+
     try {
+      const exists = await prisma.studentsOnCourses.findFirst({
+        where: {
+          courseId: Number(courseId),
+          studentId: Number(studentId),
+        },
+      });
+
+      if (exists) {
+        return res
+          .status(400)
+          .send("The student is already enrolled in this course.");
+      }
+
       const studentOnCourse = await prisma.studentsOnCourses.create({
         data: {
           course: {
