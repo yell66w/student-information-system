@@ -1,4 +1,4 @@
-import { College, Course, Program, Student } from "@prisma/client";
+import { College, Program } from "@prisma/client";
 
 export type Enrollees = {
   id: number;
