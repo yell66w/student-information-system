@@ -1,16 +1,8 @@
 import { NextPage } from "next";
 import React from "react";
 import { Enrollees } from "../types/entities";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import dayjs from "dayjs";
 
 type Props = {
   enrollees: Enrollees[];
@@ -31,7 +23,7 @@ const EnrolleesTable: NextPage<Props> = ({ enrollees }) => {
           <Th>Date Enrolled</Th>
         </Tr>
       </Thead>
-      <tbody>
+      <Tbody>
         {enrollees
           ? enrollees.map((enrollee) => (
               <Tr key={enrollee.id}>
@@ -44,11 +36,13 @@ const EnrolleesTable: NextPage<Props> = ({ enrollees }) => {
                 <Td>{enrollee.course.program.acronym}</Td>
                 <Td>{enrollee.course.code}</Td>
                 <Td>{enrollee.course.name}</Td>
-                <Td>{enrollee.dateEnrolled}</Td>
+                <Td>
+                  {dayjs(enrollee.dateEnrolled).format("YYYY-MM-DD HH:MM:ss")}
+                </Td>
               </Tr>
             ))
           : null}
-      </tbody>
+      </Tbody>
     </Table>
   );
 };
