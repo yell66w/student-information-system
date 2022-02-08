@@ -73,7 +73,9 @@ const Create: NextPage<Props> = ({ colleges }) => {
             >
               {colleges
                 ? colleges.map((college) => (
-                    <option value={college.id}>{college.name}</option>
+                    <option key={college.id} value={college.id}>
+                      {college.name}
+                    </option>
                   ))
                 : null}
             </Select>
