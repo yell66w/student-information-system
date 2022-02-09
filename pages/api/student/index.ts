@@ -7,12 +7,23 @@ export default async function handle(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { first_name, last_name, collegeId, programId } = req.body;
-
+    const { first_name, last_name, collegeId, programId, accountId } = req.body;
     if (!first_name || !last_name || !collegeId || !programId) {
       return res.status(400).send("Missing fields.");
     }
     try {
+      let data = {};
+      if (accountId) {
+        data = { ...data, account: { connect: { id: Number(accountId) } } };
+        await prisma.account.update({
+          data: {
+            role: "STUDENT",
+          },
+          where: {
+            id: Number(accountId),
+          },
+        });
+      }
       const student = await prisma.student.create({
         data: {
           first_name,
@@ -27,6 +38,7 @@ export default async function handle(
               id: Number(programId),
             },
           },
+          ...data,
         },
       });
       // TEMPORARY

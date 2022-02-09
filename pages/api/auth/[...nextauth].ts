@@ -22,6 +22,7 @@ export default NextAuth({
         if (user && credentials?.password && user?.password) {
           if (bcrypt.compareSync(credentials?.password, user.password)) {
             return {
+              id: user.id,
               username: user.username,
               role: user.role,
             };
@@ -48,11 +49,15 @@ export default NextAuth({
       if (user?.username) {
         token.username = user.username;
       }
+      if (user?.id) {
+        token.id = user.id;
+      }
       return token;
     },
     async session({ session, token }) {
       session.user.username = token?.username as string;
       session.user.role = token?.role as string;
+      session.user.id = token?.id as string;
       return session;
     },
   },

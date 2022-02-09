@@ -1,20 +1,66 @@
-import { Button, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
-import { GetServerSideProps } from "next";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+} from "@chakra-ui/react";
+import { College } from "@prisma/client";
+import { GetServerSideProps, NextPage } from "next";
 import { getSession, signIn } from "next-auth/react";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import API_URL from "../../lib/API";
+import { Program } from "../../types/entities";
 
-const SignUp = () => {
+type Props = {
+  colleges: College[];
+};
+const SignUp: NextPage<Props> = ({ colleges }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [collegeId, setCollegeId] = useState<string>("");
+  const [programId, setProgramId] = useState<string>("");
+  const [programs, setPrograms] = useState<Program[]>([]);
+
+  useEffect(() => {
+    const getPrograms = async () => {
+      const res = await fetch(`${API_URL}/programs?collegeId=${collegeId}`);
+      const programs_data = await res.json();
+      setPrograms(programs_data);
+    };
+    if (collegeId) {
+      setPrograms([]);
+      setProgramId("");
+      getPrograms();
+    }
+  }, [collegeId]);
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      if (!username || !password) {
+      if (
+        !username ||
+        !password ||
+        !firstName ||
+        !lastName ||
+        !collegeId ||
+        !programId
+      ) {
         throw "Missing fields.";
       }
-      const body = { username, password };
+      const body = {
+        username,
+        password,
+        first_name: firstName,
+        last_name: lastName,
+        collegeId,
+        programId,
+      };
       const res = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -28,7 +74,7 @@ const SignUp = () => {
 
   return (
     <>
-      <Flex h="70vh" alignItems="center" justifyContent="center">
+      <Flex h="100vh" py={6} alignItems="center" justifyContent="center">
         <form onSubmit={submitData}>
           <Flex
             color="gray.500"
@@ -68,6 +114,71 @@ const SignUp = () => {
                 placeholder="Password"
               />
             </FormControl>
+            <FormControl>
+              <FormLabel fontSize="sm" htmlFor="first_name">
+                First name
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                id="first_name"
+                placeholder="First name"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel fontSize="sm" htmlFor="last_name">
+                Last name
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                id="last_name"
+                placeholder="Last name"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel fontSize="sm" htmlFor="college">
+                College
+              </FormLabel>
+              <Select
+                fontSize="sm"
+                value={collegeId}
+                onChange={(e) => setCollegeId(e.target.value)}
+                placeholder="Select college"
+              >
+                {colleges
+                  ? colleges.map((college) => (
+                      <option key={college.id} value={college.id}>
+                        {college.name}
+                      </option>
+                    ))
+                  : null}
+              </Select>
+            </FormControl>
+            {programs.length > 0 ? (
+              <FormControl>
+                <FormLabel fontSize="sm" htmlFor="program">
+                  Program
+                </FormLabel>
+                <Select
+                  fontSize="sm"
+                  value={programId}
+                  onChange={(e) => setProgramId(e.target.value)}
+                  placeholder="Select program"
+                >
+                  {programs
+                    ? programs.map((program) => (
+                        <option key={program.id} value={program.id}>
+                          {program.name}
+                        </option>
+                      ))
+                    : null}
+                </Select>
+              </FormControl>
+            ) : null}
+
             <Flex mt={3}>
               <Button
                 type="submit"
@@ -97,9 +208,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
+  const colleges_res = await fetch(`${API_URL}colleges`);
+  const colleges = await colleges_res.json();
 
   return {
-    props: { session },
+    props: { colleges, session },
   };
 };
 
