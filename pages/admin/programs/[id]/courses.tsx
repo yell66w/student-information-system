@@ -11,11 +11,7 @@ const Courses: NextPage<Props> = ({ program }) => {
   const courses = program?.courses;
   return (
     <>
-      <AdminBodyHeader
-        title={`${program.name}`}
-        showCreateButton
-        createTitle="Create a Course"
-      />
+      <AdminBodyHeader title={`${program.name}`} />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>

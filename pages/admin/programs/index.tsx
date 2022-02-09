@@ -62,7 +62,7 @@ const Programs: NextPage<Props> = ({ programs }) => {
                       >
                         Courses
                       </Link>
-                      <Link
+                      {/* <Link
                         color="orange.500"
                         href={`/admin/programs/${program.id}/edit`}
                       >
@@ -73,7 +73,7 @@ const Programs: NextPage<Props> = ({ programs }) => {
                         onClick={() => onDelete(program.id)}
                       >
                         Delete
-                      </Link>
+                      </Link> */}
                     </HStack>
                   </Td>
                 </Tr>
