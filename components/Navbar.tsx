@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -30,7 +30,12 @@ const Navbar = () => {
         gap={6}
       >
         <Link href="/">Home</Link>
-        <Link href="/admin/enrollees">Admin</Link>
+        {session ? (
+          session.user.role === "ADMIN" ? (
+            <Link href="/admin">Admin</Link>
+          ) : null
+        ) : null}
+
         {session ? (
           <>
             <Text

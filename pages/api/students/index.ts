@@ -1,16 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../lib/prisma";
+import prisma from "../../../lib/prisma";
 
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const colleges = await prisma.college.findMany({
+    const students = await prisma.student.findMany({
       orderBy: [{ id: "asc" }],
+      include: {
+        college: true,
+      },
     });
-    res.json(colleges);
+    res.json(students);
   } else {
-    res.status(404).send("Cannot GET colleges");
+    res.status(404).send("Cannot GET students");
   }
 }
