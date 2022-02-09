@@ -35,12 +35,7 @@ const Programs: NextPage<Props> = ({ programs }) => {
 
   return (
     <>
-      <AdminBodyHeader
-        title="Programs"
-        showCreateButton
-        createTitle="Create a Program"
-        createHref="/programs/create"
-      />
+      <AdminBodyHeader title="Programs" />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>
