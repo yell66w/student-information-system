@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { STUD_NO } from "../pages/api/student";
 const prisma = new PrismaClient();
+import * as bcrypt from "bcryptjs";
 
 const collegeData: Prisma.CollegeCreateInput[] = [
   {
@@ -153,6 +154,14 @@ async function main() {
       student_no: {
         increment: STUD_NO,
       },
+    },
+  });
+
+  await prisma.account.create({
+    data: {
+      username: "admin",
+      password: bcrypt.hashSync("admin", 8),
+      role: "ADMIN",
     },
   });
 
