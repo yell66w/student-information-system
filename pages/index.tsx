@@ -1,20 +1,33 @@
-import type { GetServerSideProps, NextPage } from "next";
-import API_URL from "../lib/API";
-import { Enrollees } from "../types/entities";
-type Props = {
-  enrollees: Enrollees[];
-};
+import { Button, Flex, Heading, HStack } from "@chakra-ui/react";
+import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
-const Home: NextPage<Props> = ({ enrollees }) => {
-  return <div>Home</div>;
-};
+const Home: NextPage = ({}) => {
+  const router = useRouter();
+  const { data: session } = useSession();
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${API_URL}enrollees`);
-  const enrollees = await res.json();
-  return {
-    props: { enrollees },
-  };
+  return (
+    <Flex
+      alignItems="center"
+      minH="75vh"
+      justifyContent="center"
+      gap={6}
+      direction="column"
+    >
+      <Heading>Welcome to Telmo University</Heading>
+
+      {session ? (
+        <HStack>
+          {session?.user.role === "STUDENT" ? (
+            <Button onClick={() => router.push("/student/enroll")}>
+              Enroll Now
+            </Button>
+          ) : null}
+        </HStack>
+      ) : null}
+    </Flex>
+  );
 };
 
 export default Home;

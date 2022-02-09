@@ -37,6 +37,15 @@ const Navbar = () => {
         ) : null}
 
         {session ? (
+          session.user.role === "STUDENT" ? (
+            <>
+              <Link href="/student/enroll">Enroll</Link>
+              <Link href="/my-courses">My Courses</Link>
+            </>
+          ) : null
+        ) : null}
+
+        {session ? (
           <>
             <Text
               cursor="pointer"

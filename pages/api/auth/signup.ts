@@ -24,13 +24,31 @@ export default async function handle(
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    let { username, password } = req.body;
+    let { username, password, first_name, last_name, collegeId, programId } =
+      req.body;
     password = bcrypt.hashSync(password, 8);
     try {
       const account = await prisma.account.create({
         data: {
           username,
           password,
+          role: "STUDENT",
+          student: {
+            create: {
+              first_name,
+              last_name,
+              college: {
+                connect: {
+                  id: Number(collegeId),
+                },
+              },
+              program: {
+                connect: {
+                  id: Number(programId),
+                },
+              },
+            },
+          },
         },
       });
       return res.json(account);

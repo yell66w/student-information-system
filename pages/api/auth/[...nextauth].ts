@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../lib/prisma";
 import * as bcrypt from "bcryptjs";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { Student } from "../../../types/entities";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -18,10 +19,15 @@ export default NextAuth({
           where: {
             username: credentials?.username,
           },
+          include: {
+            student: true,
+          },
         });
         if (user && credentials?.password && user?.password) {
           if (bcrypt.compareSync(credentials?.password, user.password)) {
             return {
+              id: user.id,
+              student: user.student,
               username: user.username,
               role: user.role,
             };
@@ -48,11 +54,19 @@ export default NextAuth({
       if (user?.username) {
         token.username = user.username;
       }
+      if (user?.id) {
+        token.id = user.id;
+      }
+      if (user?.student) {
+        token.student = user.student;
+      }
       return token;
     },
     async session({ session, token }) {
       session.user.username = token?.username as string;
       session.user.role = token?.role as string;
+      session.user.id = token?.id as string;
+      session.user.student = token?.student as Student;
       return session;
     },
   },
