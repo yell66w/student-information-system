@@ -3,17 +3,14 @@ import dayjs from "dayjs";
 import type { GetServerSideProps, NextPage } from "next";
 import AdminBodyHeader from "../../../../components/AdminBodyHeader";
 import API_URL from "../../../../lib/API";
-import { Enrollees } from "../../../../types/entities";
+import { Student } from "../../../../types/entities";
 type Props = {
-  enrollees: Enrollees[];
+  student: Student;
 };
-
-const Courses: NextPage<Props> = ({ enrollees }) => {
-  const student = enrollees[0]?.student;
-
+const Courses: NextPage<Props> = ({ student }) => {
   return (
     <>
-      <AdminBodyHeader title={`${student.first_name} ${student.last_name}`} />
+      <AdminBodyHeader title={`${student?.first_name} ${student?.last_name}`} />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>
@@ -26,16 +23,18 @@ const Courses: NextPage<Props> = ({ enrollees }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {enrollees
-            ? enrollees.map((enrollee) => (
-                <Tr key={enrollee.id}>
-                  <Td>{enrollee.id}</Td>
-                  <Td>{enrollee.course.program.college.acronym}</Td>
-                  <Td>{enrollee.course.program.acronym}</Td>
-                  <Td>{enrollee.course.code}</Td>
-                  <Td>{enrollee.course.name}</Td>
+          {student
+            ? student.courses.map((studentOnCourse) => (
+                <Tr key={studentOnCourse.id}>
+                  <Td>{studentOnCourse.id}</Td>
+                  <Td>{studentOnCourse.course.program.college.acronym}</Td>
+                  <Td>{studentOnCourse.course.program.acronym}</Td>
+                  <Td>{studentOnCourse.course.code}</Td>
+                  <Td>{studentOnCourse.course.name}</Td>
                   <Td>
-                    {dayjs(enrollee.dateEnrolled).format("YYYY-MM-DD HH:MM:ss")}
+                    {dayjs(studentOnCourse.dateEnrolled).format(
+                      "YYYY-MM-DD HH:MM:ss"
+                    )}
                   </Td>
                 </Tr>
               ))
@@ -47,15 +46,13 @@ const Courses: NextPage<Props> = ({ enrollees }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  let student;
   if (params && params.id) {
-    const res = await fetch(`${API_URL}student/${params.id}/courses`);
-    const enrollees = (await res.json()) as Enrollees[];
-    return {
-      props: { enrollees },
-    };
+    const res = await fetch(`${API_URL}student/${params.id}`);
+    student = await res.json();
   }
   return {
-    props: {},
+    props: { student },
   };
 };
 

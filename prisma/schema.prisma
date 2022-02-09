@@ -29,6 +29,8 @@ model Student {
   last_name   String
   college College @relation(fields: [collegeId],references: [id])
   collegeId Int
+  program Program @relation(fields: [programId],references: [id])
+  programId Int
   courses StudentsOnCourses[]
 }
 
@@ -47,6 +49,7 @@ model Program {
   college College @relation(fields: [collegeId],references: [id],onDelete: Cascade)
   collegeId Int
   courses Course[]
+  students Student[]
 }
 
 model Course {
