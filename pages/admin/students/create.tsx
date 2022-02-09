@@ -9,27 +9,49 @@ import {
 import { College } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminBodyHeader from "../../../components/AdminBodyHeader";
 import API_URL from "../../../lib/API";
+import { Program } from "../../../types/entities";
 
 type Props = {
   colleges: College[];
 };
 
 const Create: NextPage<Props> = ({ colleges }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [collegeId, setCollegeId] = useState("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [collegeId, setCollegeId] = useState<string>("");
+  const [programId, setProgramId] = useState<string>("");
   const router = useRouter();
+
+  const [programs, setPrograms] = useState<Program[]>([]);
+
+  useEffect(() => {
+    const getPrograms = async () => {
+      const res = await fetch(`${API_URL}/programs?collegeId=${collegeId}`);
+      const programs_data = await res.json();
+      setPrograms(programs_data);
+    };
+    if (collegeId) {
+      setPrograms([]);
+      setProgramId("");
+      getPrograms();
+    }
+  }, [collegeId]);
 
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      if (!firstName || !lastName || !collegeId) {
+      if (!firstName || !lastName || !collegeId || !programId) {
         throw "Missing fields.";
       }
-      const body = { first_name: firstName, last_name: lastName, collegeId };
+      const body = {
+        first_name: firstName,
+        last_name: lastName,
+        collegeId,
+        programId,
+      };
       await fetch(`${API_URL}/student`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,6 +102,25 @@ const Create: NextPage<Props> = ({ colleges }) => {
                 : null}
             </Select>
           </FormControl>
+
+          {programs.length > 0 ? (
+            <FormControl>
+              <FormLabel htmlFor="program">Program</FormLabel>
+              <Select
+                value={programId}
+                onChange={(e) => setProgramId(e.target.value)}
+                placeholder="Select program"
+              >
+                {programs
+                  ? programs.map((program) => (
+                      <option key={program.id} value={program.id}>
+                        {program.name}
+                      </option>
+                    ))
+                  : null}
+              </Select>
+            </FormControl>
+          ) : null}
         </Flex>
         <Flex justifyContent="end">
           <Button mt={4} colorScheme="messenger" type="submit">
@@ -92,8 +133,8 @@ const Create: NextPage<Props> = ({ colleges }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`${API_URL}colleges`);
-  const colleges = await res.json();
+  const colleges_res = await fetch(`${API_URL}colleges`);
+  const colleges = await colleges_res.json();
   return { props: { colleges } };
 };
 

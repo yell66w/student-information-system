@@ -10,6 +10,7 @@ export default async function handle(
       orderBy: [{ id: "asc" }],
       include: {
         college: true,
+        program: true,
       },
     });
     res.json(students);

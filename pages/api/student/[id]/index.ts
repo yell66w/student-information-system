@@ -41,6 +41,21 @@ export default async function handle(
   async function handleGET(studentId: string | string[], res: NextApiResponse) {
     try {
       const post = await prisma.student.findUnique({
+        include: {
+          courses: {
+            include: {
+              course: {
+                include: {
+                  program: {
+                    include: {
+                      college: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         where: { id: Number(studentId) },
       });
       return res.json(post);

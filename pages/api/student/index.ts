@@ -7,9 +7,9 @@ export default async function handle(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { first_name, last_name, collegeId } = req.body;
+    const { first_name, last_name, collegeId, programId } = req.body;
 
-    if (!first_name || !last_name || !collegeId) {
+    if (!first_name || !last_name || !collegeId || !programId) {
       return res.status(400).send("Missing fields.");
     }
     try {
@@ -20,6 +20,11 @@ export default async function handle(
           college: {
             connect: {
               id: Number(collegeId),
+            },
+          },
+          program: {
+            connect: {
+              id: Number(programId),
             },
           },
         },

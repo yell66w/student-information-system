@@ -6,10 +6,16 @@ export default async function handle(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+    const collegeId = req.query.collegeId;
+    let filters = {};
+    if (collegeId) {
+      filters = { ...filters, where: { collegeId: Number(collegeId) } };
+    }
     const programs = await prisma.program.findMany({
       include: {
         college: true,
       },
+      ...filters,
       orderBy: [{ id: "asc" }],
     });
     res.json(programs);

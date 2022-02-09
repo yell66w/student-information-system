@@ -51,14 +51,6 @@ const collegeData: Prisma.CollegeCreateInput[] = [
         },
       ],
     },
-    students: {
-      create: [
-        {
-          first_name: "Tom",
-          last_name: "Holland",
-        },
-      ],
-    },
   },
   {
     name: "College of Education",
@@ -84,14 +76,6 @@ const collegeData: Prisma.CollegeCreateInput[] = [
         {
           name: "Bachelor of Science in Special Education",
           acronym: "BSPED",
-        },
-      ],
-    },
-    students: {
-      create: [
-        {
-          first_name: "Andrew",
-          last_name: "Garfield",
         },
       ],
     },
@@ -125,30 +109,69 @@ const collegeData: Prisma.CollegeCreateInput[] = [
         },
       ],
     },
-    students: {
-      create: [
-        {
-          first_name: "Tobby",
-          last_name: "Maguire",
-        },
-      ],
+  },
+];
+
+const studentData: Prisma.StudentCreateInput[] = [
+  {
+    first_name: "Tom",
+    last_name: "Holland",
+    college: {
+      connect: {
+        acronym: "CAS",
+      },
+    },
+    program: {
+      connect: {
+        acronym: "BSIT",
+      },
+    },
+  },
+
+  {
+    first_name: "Andrew",
+    last_name: "Garfield",
+    college: {
+      connect: {
+        acronym: "COFED",
+      },
+    },
+    program: {
+      connect: {
+        acronym: "BSED",
+      },
+    },
+  },
+  {
+    first_name: "Tobby",
+    last_name: "Maguire",
+    college: {
+      connect: {
+        acronym: "CME",
+      },
+    },
+    program: {
+      connect: {
+        acronym: "BSTM",
+      },
     },
   },
 ];
 
 async function main() {
   console.log(`Start seeding ...`);
-
   for (const c of collegeData) {
     const college = await prisma.college.create({
       data: c,
-      include: {
-        students: true,
-      },
     });
     console.log(`Created college with college id: ${college.id}`);
   }
-
+  for (const s of studentData) {
+    const student = await prisma.student.create({
+      data: s,
+    });
+    console.log(`Created student with student id: ${student.id}`);
+  }
   await prisma.student.updateMany({
     data: {
       student_no: {

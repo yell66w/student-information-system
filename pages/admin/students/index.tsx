@@ -47,6 +47,7 @@ const Students: NextPage<Props> = ({ students }) => {
             <Th>Student #</Th>
             <Th>Name</Th>
             <Th>College</Th>
+            <Th>Program</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
@@ -60,6 +61,7 @@ const Students: NextPage<Props> = ({ students }) => {
                     {student.first_name} {student.last_name}
                   </Td>
                   <Td>{student.college.acronym}</Td>
+                  <Td>{student.program.acronym}</Td>
                   <Td>
                     <HStack>
                       <Link

@@ -33,7 +33,7 @@ const Enroll: NextPage<Props> = ({ student, courses }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      await router.push("/admin/enrollees");
+      await router.push(`/admin/students/${id}/courses`);
     } catch (error) {
       console.error(error);
     }
