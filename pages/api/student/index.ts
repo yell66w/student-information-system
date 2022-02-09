@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 export const STUD_NO = 2200000;
 
-// POST /api/student
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
