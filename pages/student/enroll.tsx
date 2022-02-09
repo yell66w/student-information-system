@@ -1,23 +1,17 @@
 import {
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Button,
+  HStack,
+  Link,
   Table,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
-  HStack,
-  Link,
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import AdminBodyHeader from "../../components/AdminBodyHeader";
 import API_URL from "../../lib/API";
 import { Course } from "../../types/entities";
