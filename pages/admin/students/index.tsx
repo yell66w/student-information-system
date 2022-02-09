@@ -59,11 +59,17 @@ const Students: NextPage<Props> = ({ students }) => {
                   <Td>
                     {student.first_name} {student.last_name}
                   </Td>
-                  <Td>{student.college.name}</Td>
+                  <Td>{student.college.acronym}</Td>
                   <Td>
                     <HStack>
                       <Link
                         color="messenger.500"
+                        href={`/admin/students/${student.id}/courses`}
+                      >
+                        Courses
+                      </Link>
+                      <Link
+                        color="green.500"
                         href={`/admin/students/${student.id}/enroll`}
                       >
                         Enroll

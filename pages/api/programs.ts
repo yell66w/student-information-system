@@ -7,6 +7,9 @@ export default async function handle(
 ) {
   if (req.method === "GET") {
     const programs = await prisma.program.findMany({
+      include: {
+        college: true,
+      },
       orderBy: [{ id: "asc" }],
     });
     res.json(programs);
