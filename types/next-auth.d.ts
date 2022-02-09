@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import { Role, Branch } from "entities";
+import { Student } from "./entities";
 
 declare module "next-auth" {
   /**
@@ -10,6 +11,7 @@ declare module "next-auth" {
       id: string;
       role: string;
       username: string;
+      student: Student;
     };
   }
 }

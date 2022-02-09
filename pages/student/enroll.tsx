@@ -29,7 +29,7 @@ type Props = {
 const Enroll: NextPage<Props> = ({ courses }) => {
   const router = useRouter();
   const { data: session } = useSession();
-  const id = session?.user.id;
+  const id = session?.user.student.id;
 
   const onEnroll = async (
     e: React.SyntheticEvent,
