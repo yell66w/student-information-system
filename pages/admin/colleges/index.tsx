@@ -10,11 +10,7 @@ type Props = {
 const Colleges: NextPage<Props> = ({ colleges }) => {
   return (
     <>
-      <AdminBodyHeader
-        title="Colleges"
-        showCreateButton
-        createTitle="Create a College"
-      />
+      <AdminBodyHeader title="Colleges" />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>

@@ -1,8 +1,8 @@
 import { Flex, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
-import { Course } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import AdminBodyHeader from "../../../components/AdminBodyHeader";
 import API_URL from "../../../lib/API";
+import { Course } from "../../../types/entities";
 type Props = {
   courses: Course[];
 };
@@ -10,17 +10,15 @@ type Props = {
 const Courses: NextPage<Props> = ({ courses }) => {
   return (
     <>
-      <AdminBodyHeader
-        title="Courses"
-        showCreateButton
-        createTitle="Create a Course"
-      />
+      <AdminBodyHeader title="Courses" />
       <Table variant="simple" fontSize="sm" w="full">
         <Thead>
           <Tr>
             <Th>ID</Th>
-            <Th>Name</Th>
             <Th>Code</Th>
+            <Th>Name</Th>
+            <Th>College</Th>
+            <Th>Program</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -28,8 +26,10 @@ const Courses: NextPage<Props> = ({ courses }) => {
             ? courses.map((course) => (
                 <Tr key={course.id}>
                   <Td>{course.id}</Td>
-                  <Td>{course.name}</Td>
                   <Td>{course.code}</Td>
+                  <Td>{course.name}</Td>
+                  <Td>{course.program.college.acronym}</Td>
+                  <Td>{course.program.acronym}</Td>
                 </Tr>
               ))
             : null}

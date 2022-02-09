@@ -7,73 +7,76 @@ import { check, validationResult } from "express-validator";
 const validateBody = initMiddleware(
   validateMiddleware(
     [
-      check("first_name").isLength({ min: 1, max: 40 }).optional(),
-      check("last_name").isLength({ min: 1, max: 40 }).optional(),
+      check("name").isLength({ min: 1, max: 40 }).optional(),
+      check("acronym").isLength({ min: 1, max: 40 }).optional(),
     ],
     validationResult
   )
 );
 
-// POST /api/student
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const studentId = req.query.id;
+  const programId = req.query.id;
 
   if (req.method === "GET") {
-    handleGET(studentId, res);
+    handleGET(programId, res);
   } else if (req.method === "PATCH") {
     await validateBody(req, res);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    handlePATCH(studentId, req, res);
+    handlePATCH(programId, req, res);
   } else if (req.method === "DELETE") {
-    handleDELETE(studentId, res);
+    handleDELETE(programId, res);
   } else {
     throw new Error(
       `The HTTP ${req.method} method is not supported at this route.`
     );
   }
 
-  async function handleGET(studentId: string | string[], res: NextApiResponse) {
+  async function handleGET(programId: string | string[], res: NextApiResponse) {
     try {
-      const post = await prisma.student.findUnique({
-        where: { id: Number(studentId) },
+      const program = await prisma.program.findUnique({
+        include: {
+          courses: true,
+          college: true,
+        },
+        where: { id: Number(programId) },
       });
-      return res.json(post);
+      return res.json(program);
     } catch (error: any) {
       return res.status(400).send(error.message);
     }
   }
 
   async function handleDELETE(
-    studentId: string | string[],
+    programId: string | string[],
     res: NextApiResponse
   ) {
     try {
-      const post = await prisma.student.delete({
-        where: { id: Number(studentId) },
+      const program = await prisma.program.delete({
+        where: { id: Number(programId) },
       });
-      return res.json(post);
+      return res.json(program);
     } catch (error: any) {
       return res.status(400).send(error.message);
     }
   }
 
   async function handlePATCH(
-    studentId: string | string[],
+    programId: string | string[],
     req: NextApiRequest,
     res: NextApiResponse
   ) {
     try {
-      const post = await prisma.student.update({
+      const program = await prisma.program.update({
         data: req.body,
-        where: { id: Number(studentId) },
+        where: { id: Number(programId) },
       });
-      return res.json(post);
+      return res.json(program);
     } catch (error: any) {
       return res.status(400).send(error.message);
     }

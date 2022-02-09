@@ -32,4 +32,5 @@ export type Program = {
   acronym: string;
   collegeId: number;
   college: College;
+  courses: Course[];
 };
