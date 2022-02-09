@@ -2,9 +2,9 @@ import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
-import AdminBodyHeader from "../components/AdminBodyHeader";
-import API_URL from "../lib/API";
-import { Student } from "../types/entities";
+import AdminBodyHeader from "../../components/AdminBodyHeader";
+import API_URL from "../../lib/API";
+import { Student } from "../../types/entities";
 type Props = {
   student: Student;
 };
