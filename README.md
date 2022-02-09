@@ -17,8 +17,8 @@ npx prisma migrate reset
 ```
 
 ## ADMIN ACCOUNT
-username:admin
-password:admin
+- username: admin
+- password: admin
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
