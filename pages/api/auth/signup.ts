@@ -4,6 +4,7 @@ import initMiddleware from "../../../lib/init-middleware";
 import prisma from "../../../lib/prisma";
 import validateMiddleware from "../../../lib/validate-middleware";
 import * as bcrypt from "bcryptjs";
+import { STUD_NO } from "../student";
 const validateBody = initMiddleware(
   validateMiddleware(
     [
@@ -49,8 +50,31 @@ export default async function handle(
               },
             },
           },
+          
+        },
+        include:{
+          student:true
+        }
+      });
+
+      // TEMPORARY
+      const student = account.student
+      const student_no = student!.student_no += STUD_NO
+
+     await prisma.student.update({
+        data: {
+          student_no,
+        },
+        where: {
+          id: student!.id,
+        },
+        include: {
+          college: true,
         },
       });
+
+
+
       return res.json(account);
     } catch (error: any) {
       return res.status(400).send("Invalid username or password.");
